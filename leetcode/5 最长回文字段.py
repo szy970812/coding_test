@@ -15,37 +15,36 @@ def func(s):
             else:
                 if s[i] == s[j]:
                     dp_map[i][j] = True
-    res = [s[0]]
-    res_index = [0]
-    max_len = 1
+    res = []
     for k in range(2 * lens):
-        flag = False
         current_res = []
-        current_index = []
-        current_lens = 0
         for l in range(k + 1):
             if k - l > lens - 1 or l > lens - 1:
                 continue
             if dp_map[k - l][l] is True:
-                if k == 4:
-                    print((k - l, l))
-                flag = True
-                current_lens += 1
-                current_res.append(s[l])
-                current_index.append(l)
-            if flag and (dp_map[k - l][l] is False or k == l or l == lens - 1):
-                if current_lens >= max_len:
-                    max_len = current_lens
-                    res.clear()
-                    res.extend(current_res)
-                    res_index.clear()
-                    res_index.extend(current_index)
-                break
+                current_res.append((k - l, l))
 
-    print("".join(res))
-    print(res_index)
+        if len(current_res) >= 1:
+            start = 0
+            end = -1
+            for r in range(1, len(current_res)):
+                if current_res[r][0] == current_res[r - 1][0] - 1:
+                    pass
+                else:
+                    end = r - 1
+                    if end - start + 1 > len(res) and current_res[start][0] == current_res[end][1]:
+                        res.clear()
+                        res.extend(current_res[start: end + 1])
+                    start = r
+            if end == -1:
+                end = len(current_res) - 1
+                if end - start + 1 > len(res) and current_res[start][0] == current_res[end][1]:
+                    res.clear()
+                    res.extend(current_res[start: end + 1])
+    # print("".join([s[asd[1]] for asd in res]))
+    return "".join([s[asd[1]] for asd in res])
 
 
 if __name__ == '__main__':
-    string = "aacabdkacaa"
+    string = "ac"
     func(string)
